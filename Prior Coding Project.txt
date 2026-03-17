@@ -1,0 +1,20 @@
+One project I’m especially proud of is an NLP-based model I built to generate movie titles from plot descriptions:
+https://medium.com/@stephaniesarkar/generating-movie-titles-from-plot-lines-ca590ec55b2a
+
+This was a collaborative project, and one of the most rewarding aspects was working with teammates who had different skill sets. Some members focused more on data collection and preprocessing, while others contributed to model development and evaluation.
+
+The goal was to explore how natural language processing can be used creatively—not just for classification tasks, but for generative storytelling.. Given a movie plot, the model produces plausible and engaging title suggestions—something that typically requires human intuition and creativity. Projects like this sit at the intersection of structured machine learning and creative language generation, which I find particularly interesting.
+
+I’m proud of this work for a few reasons:
+
+First, it required building an end-to-end pipeline as a team. We collaborated on cleaning and preparing real-world text data, which involved coordinating decisions around preprocessing techniques and ensuring consistency across our workflow.
+
+Second, we applied core NLP techniques to transform raw text into meaningful features that a model could learn from. This included vectorization approaches that capture the importance and uniqueness of words within plot summaries, which is foundational for understanding and generating language-based outputs. 
+
+Third, collaboration played a key role in improving the final product. By combining different perspectives—technical, analytical, and creative—we were able to refine the generated titles so they were not only accurate but also intuitive and engaging. Instead of just building a model, we thought about how the results would actually be used—ensuring the generated titles were readable, relevant, and aligned with the tone of the input plot. This reflects how AI tools are increasingly used in creative workflows, such as generating titles based on story summaries or themes.
+
+Finally, this project stands out to me because it demonstrates both technical depth and effective teamwork. It reflects my ability to contribute to a shared goal, communicate ideas clearly, and build on others’ strengths while working toward a creative AI solution. I’m proud of this project because it demonstrates both technical depth and creativity. It goes beyond standard predictive modeling and shows how machine learning can be used to augment human creativity, which is an area I’m excited to continue exploring.
+
+
+
+
