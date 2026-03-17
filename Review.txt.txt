@@ -1,0 +1,39 @@
+Overall summary:
+This feature looks useful and the implementation makes sense. The addition of short codes for linters and the new list-linters command should improve usability. However, I noticed a few areas that may need attention before merging.
+
+Comments:
+1. [jenkins_job_linter/__init__.py] 
+   Problem: There are no validation or error handling for invalid short codes (Lines 112 and 120).
+   Why it matters: It is relatively easy to mistype short codes without noticing. If the user passes an invalid code and nothing gives a warning, this could result in the wrong set of linters run or the user input being ignored.
+   Suggestion: At a minimum, print a warning that lists unknown codes to the user or collect invalid codes and raise a CLI error.
+
+2. [jenkins_job_linter/__init__.py] 
+   Problem: The select and ignore blocks will always run config.set even if there are errors or invalid codes passed by the user (Lines 114, 123-124).
+   Why it matters: It may result in unclear or ambiguous downstream behavior if downstream systems do not know how to handle the invalid codes or errors passed to them, different systems may interpret them differently.
+   Suggestion: Only set the config if the job_linter list is not empty or incorporate error handling for invalid inputs.
+
+3. [jenkins_job_linter/__init__.py] 
+   Problem: It is possible that a duplicate job_linter section could be created in config if both the select and ignore blocks are run. Both blocks call config.add_section('job_linter').
+   Why it matters: If both calls are run and it attempts to create a duplicate job_linter section, there could be a possible runtime error.
+   Suggestion: Before adding the job_linter section, check if config has already created one: if not config.has_section('job_linter').
+
+4. [jenkins_job_linter/linters.py] 
+   Problem: There are some issues with the short_code implementation and documentation. There is no check or cleaning of short code list inputs. The annotation of short_code on Line 44 gives a type bool when short_code is used as a string everywhere else. The short code L006 is also assigned twice on lines 206 and 235. Which coincides with LINTER_SHORT_CODES not validating uniqueness when created (Lines 308-309).
+   Why it matters: If the user passes a short code list with whitespace, it will not correctly parse to match the dictionary keys in LINTER_SHORT_CODES. The comment "type: bool" is confusing and misleading for readers and potentially for future troubleshooting. Short codes are unique identifiers for linters. With duplicate short codes it can make future calls ambiguous or difficult to trace. If two linters share a short code or if multiple linters have type None, they will overwrite each other under the None key in LINTER_SHORT_CODES.
+   Suggestion: Strip whitespace from the short code inputs before checking for them in LINTER_SHORT_CODES. Change the comment to something like: "# type: Optional[str]" to be clear that future instances of short_code will be a string or may remain NoneType. Ensure each short code is unique to each linter. Create a check that skips None values when adding short codes to LINTER_SHORT_CODES or include a validation check to see if the short code is already found in the dictionary.
+
+5. [docs/source/running.rst, docs/source/linters.rst] 
+   Problem: Some documentation updates could help improve usability. There is no documentation for --select or --ignore behavior. The documentation for jenkins-job-linter list-linters could include more details or provide an example output block for the user.    
+Why it matters: Users can see documentation for short codes but not necessarily how to apply them when running the linter. There is also no description of what format the user should expect the output to be in.
+Suggestion: Add documentation to running.rst the describe the connection between the short codes and --select/--ignore, perhaps by adding example sections that demonstrate the workflow so users understand how to apply the short codes when running the linter. Include a small example output in the correct format to make the documentation more helpful and understandable.
+
+6. [integration_tests/] 
+   Problem: Missing testing for --select and --ignore implementations, as well as the new list-linters feature. 
+   Why it matters: Adding this additional testing will ensure the new CLI functionality works end-to-end and the new list-linters command remains stable.
+   Suggestion: Add an integration test validating --select and --ignore. Add testing that verifies: linter name, short code, description, and default config if it is present.
+
+
+Time spent: 2 hours
+
+
+
